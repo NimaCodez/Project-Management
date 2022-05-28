@@ -1,3 +1,5 @@
+const { Routes } = require('./routers/router');
+
 module.exports = class Application {
     #express = require('express');
     #app = this.#express();
@@ -20,6 +22,7 @@ module.exports = class Application {
                 message: "Express OOP App"
             })
         })
+        this.#app.use(Routes)
     }
     createServer(port){
         const http = require('http');
