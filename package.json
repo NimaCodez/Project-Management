@@ -1,0 +1,24 @@
+{
+  "name": "projectmanager",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000P\u0000r\u0000o\u0000j\u0000e\u0000c\u0000t\u0000-\u0000M\u0000a\u0000n\u0000a\u0000g\u0000e\u0000m\u0000e\u0000n\u0000t\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodeomon node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevNima-PG/Project-Management.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DevNima-PG/Project-Management/issues"
+  },
+  "homepage": "https://github.com/DevNima-PG/Project-Management#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.3.4"
+  }
+}
