@@ -5,10 +5,10 @@ const userRouter = require("./user.router");
 
 const router = require("express").Router();
 
-router.get('/auth', authRouter)
-router.get('/project', projectRouter)
-router.get('/user', userRouter)
-router.get('/team', teamRouter)
+router.use('/auth', authRouter)
+router.use('/project', projectRouter)
+router.use('/user', userRouter)
+router.use('/team', teamRouter)
 
 
 module.exports = {

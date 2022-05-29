@@ -1,5 +1,3 @@
-const router = require("express").Router();
+const userRouter = require("express").Router();
 
-module.exports = {
-    userRouter: router,
-}
+module.exports = userRouter

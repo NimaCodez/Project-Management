@@ -1,5 +1,3 @@
-const router = require("express").Router();
+const projectRouter = require("express").Router();
 
-module.exports = {
-    projectRouter: router,
-}
+module.exports = projectRouter;
