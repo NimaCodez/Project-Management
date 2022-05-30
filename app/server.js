@@ -34,7 +34,7 @@ module.exports = class Application {
     configDatabse(databse_url){
         const mongoose = require('mongoose');
         mongoose.connect(databse_url, (err) => {
-            if(err) throw err
+            if(err) throw err;
             return console.log("Connected to databse...")
         })
     }

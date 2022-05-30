@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model, Types } = require("mongoose")
 
 const userSchema = new Schema({
     firstName: { type: String, required: false },
@@ -7,8 +7,9 @@ const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true, },
     email: { type: String, required: true, unique: true },
-    skills: { type: Array, required: false, default: [] },
-    teams: { type: Array, required: false, default: [] },
+    skills: { type: [String], required: false, default: [] },
+    teams: { type: [Types.ObjectId], required: false, default: [] },
+    token: { type: String },
     roles: { type: Array, required: true, default: ["USER"] }
 }, {timestamps: true})
 

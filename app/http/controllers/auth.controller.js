@@ -1,7 +1,5 @@
-const { validationResult } = require("express-validator");
 const { UserModel } = require("../../models/user.model");
-const { hashString, obscureEmail } = require("../../modules/utils");
-const { validationErrorMapper } = require("../middlewares/functions");
+const { hashString, obscureEmail, compareDataWithHash, generateJwtToken } = require("../../modules/utils");
 
 class AuthController {
     async Register(req, res, next) {
@@ -22,8 +20,26 @@ class AuthController {
         }
     }
 
-    Login(){
-
+    async Login(req, res, next) {
+        req.user = null;
+        req.isLoggedIn = false;
+        const {username, password} = req.body;
+        const user = await UserModel.findOne({username})
+        if(!user) throw {status: 404, success: false, message: "Username or password do not match."}
+        const result = compareDataWithHash(password, user.password)
+        if(!result) throw {status: 401, success: false, message: "Username or password do not match."}
+        console.log(user);
+        const token = generateJwtToken(user);
+        user.token = token;
+        await user.save();
+        req.user = user;
+        req.isLoggedIn = true;
+        return await res.status(200).json({
+            status: 200, 
+            success: true,
+            message: "Welcome to Your Account!",
+            token
+        })
     }
 
     resetPassword(){
