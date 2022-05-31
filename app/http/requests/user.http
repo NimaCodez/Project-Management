@@ -1,0 +1,9 @@
+### Get User Profile
+
+Get http://localhost:8000/user/profile
+authorization: {{$dotenv token}}
+
+{
+    "username": "imnimaa",
+    "password": "nimanima"
+}
