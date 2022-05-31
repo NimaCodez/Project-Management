@@ -4,13 +4,13 @@ const { verifyToken } = require("../../modules/utils")
 const checkLogin = async (req, res, next) => {
     try {
         const authorization = req?.headers?.authorization;
-        if(!authorization) throw { status: 401, success: false, message: "Please bia to your account" }
+        if(!authorization) throw { status: 401, success: false, message: "Please log in to your account" }
         let token = authorization.split(" ")?.[1]
-        if (!token) throw { status: 401, success: false, message: "Please enter to your account" }
+        if (!token) throw { status: 401, success: false, message: "Please log in to your account" }
         const { username } = verifyToken(token)
         if (!username) throw { status: 401, success: false, message: "Please log in to your account" }
         const user = await UserModel.findOne({ username }, { password: 0, createdAt: 0, updatedAt: 0, __v: 0 })
-        if (!user) throw { status: 401, success: false, message: "Please vorood account" }
+        if (!user) throw { status: 401, success: false, message: "Please log in to your account" }
         req.user = user;
         next()
     } catch (error) {
