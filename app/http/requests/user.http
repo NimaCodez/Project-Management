@@ -7,3 +7,15 @@ authorization: {{$dotenv token}}
     "username": "imnimaa",
     "password": "nimanima"
 }
+
+### Edit User Profile
+
+Post http://localhost:8000/user/profile
+authorization: {{$dotenv token}}
+Content-Type: application/json
+
+{
+    "firstName": "Nima.",
+    "lastName": "Aha",
+    "skills": ["Progamming", "REST Api", "Back-end", "js"]
+}
