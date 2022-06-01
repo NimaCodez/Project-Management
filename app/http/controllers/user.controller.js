@@ -33,7 +33,6 @@ class UserController {
         try {
             const userId = req.user._id;
             const pathPrefix = path.join(__dirname, "..", "..");
-            console.log(req.file.path.substring(pathPrefix.length));
             let image;
             if (!req.file) {
                 throw { status: 400, success: false, message: "Please Choose A File" }
