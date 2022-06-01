@@ -4,17 +4,17 @@ Post http://localhost:8000/auth/register
 Content-Type: application/json
 
 {
-    "username": "tc.co",
-    "password": "coderteen",
-    "email": "tccomn@texh.com",
-    "password_confirm": "coderteen",
-    "mobile": "09987654312"
+    "username": "",
+    "password": "",
+    "email": "",
+    "password_confirm": "",
+    "mobile": ""
 }
 
 ### lognin
 Post http://localhost:8000/auth/login
 
 {
-    "username": "tc.co",
-    "password": "coderteen",
+    "username": "",
+    "password": "",
 }
