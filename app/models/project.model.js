@@ -11,13 +11,3 @@ const projectSchema = new Schema({
 const projectModel = model("projects", projectSchema);
 
 module.exports = { projectModel }
-
-
-Title
-Text
-Image
-Tags: []
-Owner (User)
-Team: TeamId
-Private
-show

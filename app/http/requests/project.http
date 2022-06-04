@@ -1,0 +1,9 @@
+### Create Project
+post http://localhost:8000/project/new
+Content-Type: application/json
+authorization: {{$dotenv token}}
+
+{
+    "title": "",
+    "text": ""
+}
