@@ -4,8 +4,8 @@ Get http://localhost:8000/user/profile
 authorization: {{$dotenv token}}
 
 {
-    "username": "imnimaa",
-    "password": "nimanima"
+    "username": "",
+    "password": ""
 }
 
 ### Edit User Profile
@@ -15,7 +15,7 @@ authorization: {{$dotenv token}}
 Content-Type: application/json
 
 {
-    "firstName": "Nima.",
-    "lastName": "Aha",
+    "firstName": "",
+    "lastName": "",
     "skills": ["Progamming", "REST Api", "Back-end", "js"]
 }

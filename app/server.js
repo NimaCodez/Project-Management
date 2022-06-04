@@ -12,8 +12,8 @@ module.exports = class Application {
     }
     configApplication(){
         const path = require('path');
-        this.#app.use(this.#express.json());
-        this.#app.use(this.#express.urlencoded({extended: true}));
+        this.#app.use(this.#express.json({limit: "50mb"}));
+        this.#app.use(this.#express.urlencoded({extended: true, limit: "50mb"}));
         this.#app.use(this.#express.static(path.join(__dirname, "..", "public")))
     }
     createRoutes(){

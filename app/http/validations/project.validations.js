@@ -1,4 +1,5 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
+const { isValidObjectId } = require("mongoose");
 
 function createProjectValodator() {
     return [
@@ -7,4 +8,10 @@ function createProjectValodator() {
     ]
 }
 
-module.exports = {createProjectValodator};
+function uploadProjectProfile() {
+    return [
+        body("project_profile").not().isEmpty().withMessage("Please Choose an image"),
+    ]
+}
+
+module.exports = {createProjectValodator, uploadProjectProfile};

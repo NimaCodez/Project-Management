@@ -5,6 +5,7 @@ const path = require('path');
 const { UserModel } = require('../models/user.model')
 const crypto = require('crypto');
 const fs = require('fs');
+const { projectModel } = require('../models/project.model');
 require('dotenv').config();
 
 const hashString = string => {
@@ -43,7 +44,15 @@ const createFilePath = async (req) => {
     const year = new Date().getUTCFullYear();
     const month = new Date().getMonth();
     const day = new Date().getDate();
-    const filePath = path.join(`${__dirname}/../../public/uploads/${year}/${month}/${day}/images/${username}/profile`);
+    const filePath = path.join(`${__dirname}/../../public/uploads/profiles/${year}/${month}/${day}/images/${username}`);
+    return filePath;
+};
+
+const createProjectFilePath = async (req) => {
+    const owner = req.user._id;
+    const { _id } = await projectModel.findOne({ owner });
+    console.log(_id);
+    const filePath = path.join(`${__dirname}/../../public/uploads/projects/profiles/${String(_id).substring(3,9).replace(/[a-zA-z0-9]/i, 'A')}`);
     return filePath;
 };
 
@@ -58,6 +67,21 @@ const createFilePath = async (req) => {
 //     dir.includes(fname) ? 1 : 0;
 // };
 
+const projectStorage = multer.diskStorage({
+    destination: async function (req, file, callback) {
+        const projectFilePath = await createProjectFilePath(req);
+        fs.mkdirSync(projectFilePath, {recursive: true});
+        callback(null, projectFilePath);
+    },
+    filename: async function (req, file, callback) {
+        let imageName = `${hashImageName(file.originalname)}.jpg`;
+        callback(null, imageName)
+    }
+})
+
+const projectFileUploader = multer({storage: projectStorage})
+
+
 const storage = multer.diskStorage({
     destination: async function (req, file, callback) {
         const filePath = await createFilePath(req)
@@ -66,7 +90,6 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, callback) {
         let imageName = `${hashImageName(file.originalname)}.jpg`;
-        console.log(checkFileExistance(req.user.username, imageName));
         callback(null, imageName)
     }
 })
@@ -79,6 +102,7 @@ module.exports = {
     compareDataWithHash,
     generateJwtToken,
     verifyToken,
+    hashImageName,
     FileUploader,
-    hashImageName
+    projectFileUploader,
 }

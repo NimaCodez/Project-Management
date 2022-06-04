@@ -32,7 +32,6 @@ class UserController {
     async UploadProfile(req, res, next) {
         try {
             const userId = req.user._id;
-            console.log(path.join(__dirname, "..", "..", ".."));
             const pathPrefix = path.join(__dirname, "..", "..", "..");
             let image;
             if (!req.file) {
@@ -41,13 +40,10 @@ class UserController {
             else {
                 image = req.file.path.substring(pathPrefix.length).split("\\public")[1].replace(/[\\]/gi, "/");
             }
-            console.log(req.file.path);
-            console.log(image);
             const result = await UserModel.updateOne({ _id: userId }, { $set: { profileUrl: image } })
             if (result.modifiedCount <= 0) {
                 throw { status: 400, success: false, message: "Nothing Changed In Databse" }
             }
-            console.log(`${req.protocol}://${req.get("host")}${image}`);
             return res.json({
                 status: 200,
                 success: true,
