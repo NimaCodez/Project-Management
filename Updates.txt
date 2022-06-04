@@ -1,0 +1,1 @@
+1. Image Naming Conventions Changed To Hash instead of Date.Now() to prevent Storing the same image.

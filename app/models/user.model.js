@@ -8,7 +8,7 @@ const userSchema = new Schema({
     password: { type: String, required: true, },
     email: { type: String, required: true, unique: true },
     skills: { type: [String], required: false, default: [] },
-    profile: { type: String, required: false, default: "/defualts/default.png"},
+    profileUrl: { type: String, required: false, default: "/defualts/default.png"},
     teams: { type: [Types.ObjectId], required: false, default: [] },
     token: { type: String },
     roles: { type: Array, required: true, default: ["USER"] }
