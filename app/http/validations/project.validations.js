@@ -1,5 +1,4 @@
-const { body, param } = require("express-validator");
-const { isValidObjectId } = require("mongoose");
+const { body } = require("express-validator");
 
 function createProjectValodator() {
     return [
@@ -11,6 +10,7 @@ function createProjectValodator() {
 function uploadProjectProfile() {
     return [
         body("project_profile").not().isEmpty().withMessage("Please Choose an image"),
+        body("tags").isLength({min: 0, max: 10}).withMessage("A Project Cannot have more than 10 tags")
     ]
 }
 

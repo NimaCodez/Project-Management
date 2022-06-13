@@ -4,6 +4,6 @@ Content-Type: application/json
 authorization: {{$dotenv token}}
 
 {
-    "title": "",
-    "text": ""
+    "title": "pedaret Mord",
+    "text": "aha belakhare pedaret mord"
 }

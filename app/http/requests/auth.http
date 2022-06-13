@@ -4,17 +4,18 @@ Post http://localhost:8000/auth/register
 Content-Type: application/json
 
 {
-    "username": "",
-    "password": "",
-    "email": "",
-    "password_confirm": "",
-    "mobile": ""
+    "username": "adminam",
+    "password": "adminam",
+    "email": "adminam@example.com",
+    "password_confirm": "adminam",
+    "mobile": "09123121212"
 }
 
 ### lognin
 Post http://localhost:8000/auth/login
+Content-Type: application/json
 
 {
-    "username": "",
-    "password": "",
+    "username": "adminam",
+    "password": "adminam"
 }

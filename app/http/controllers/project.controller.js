@@ -1,12 +1,17 @@
+const autoBind = require("auto-bind");
+const { isValidObjectId, isObjectIdOrHexString, default: mongoose } = require("mongoose");
 const path = require("path");
 const { projectModel } = require("../../models/project.model");
 
 class ProjectController {
+    constructor() {
+        autoBind(this)
+    }
     async CreateProject(req, res, next) {
         try {
-            const {title, text} = req.body;
+            const {title, text, tags} = req.body;
             const owner = req.user._id;
-            const result = await projectModel.create({title, text, owner})
+            const result = await projectModel.create({title, text, owner, tags})
             if(!result) throw {status: 400, success: false, message: "Project Was not created"}
             return res.status(201).json({
                 status: 201, 
@@ -17,28 +22,55 @@ class ProjectController {
             next(error);
         }
     }
-    GetAllProjects() {
-
+    async GetAllProjects(req, res, next) {
+        try {
+            const owner = req.user._id;
+            const projects = await projectModel.find({owner}, {_id: 0, __v: 0, owner: 0})
+            const {title, tags, text, image} = projects;
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                projects,
+                title, tags, text, image
+            })
+        } catch (error) {
+            next(error);
+        }
     }
-    GetProjectsById() {
-
+    async findProject(projectId, owner) {
+        if(!isValidObjectId(projectId)) throw {status: 404, success: false, message: "Id Not Valid"};
+        const project = await projectModel.findOne({owner, _id: projectId}, {__v: 0, _id: 0});
+        if (!project) throw {status: 400, success: false, message: "Project Not Found"}
+        return project;
     }
-    GetAllProjectsOfTeam() {
-
-    }
-    // getProjectOfUser
-    GetUserProjects() {
-
+    async GetProjectsById(req, res, next) {
+        try {
+            const owner = req.user._id;
+            const projectId = req.params.id;
+            const project = await this.findProject(projectId, owner)
+            if (!project) throw { status: 404, success: false, message: "Project Was not found"}
+            project.image = project.image.split("/")[0].replace([], `${req.protocol}://${req.get("host")}${project.image}`)
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                project
+            })
+        } catch (error) {
+            next(error)
+        }
     }
     async UpdateProject(req, res, next) {
         try {
-            let owner = req.user._id;
+            const owner = req.user._id;
+            const projectId = req.params.id;
             const data = {...req.body};
-            const project = await projectModel.findOne({ owner: owner })
+            const project = await projectModel.findOne({ owner, _id: projectId })
             if(!project) throw {status: 400, success: false, message: "Project was not found!!"}
-            const result = await projectModel.updateOne({ owner: owner }, { $set: data })
             const pathPrefix = path.join(__dirname, "..", "..", "..");
             let image = req.file.path.substring(pathPrefix.length).split("\\public")[1].replace(/[\\]/gi, "/");
+            project.image = `${req.protocol}://${req.get("host")}${image}`
+            project.save()
+            const result = await projectModel.updateOne({ owner: owner, _id: projectId }, { $set: data })
             console.log(`${req.protocol}://${req.get("host")}${image}`);
             if (result.modifiedCount > 0) return res.status(200).json({ status: 200, success: true, message: "Profile Was Updated Successfuly", profile: `${req.protocol}://${req.get("host")}${image}` })
             throw { status: 400, success: false, message: "Profile Was Not Updated" }
@@ -46,9 +78,49 @@ class ProjectController {
             next(error)
         }
     }
-    RemoveProject() {
 
+    async RemoveProject(req, res, next) {
+        try {
+            const owner = req.user._id;
+            console.log("owner: ", owner);
+            const projectId = req.params.id;
+            console.log("projectid: ", projectId);
+            const deleteResult = await projectModel.deleteOne({ owner, _id: projectId })
+            if (!deleteResult.deletedCount == 0) throw {status: 500, success: false, message: "Project was not deleted, Try again"}
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "projet deleted successfully!"
+            })
+        } catch (error) {
+            next(error)
+        }
     }
+
+    GetAllProjectsOfTeam(req, res, next) {
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+    }
+    
+    // // getProjectOfUser
+    // async GetUserProjects(req, res, next) {
+    //     try {
+    //         const userId = req.user._id;
+    //         const projects = await projectModel.find({owner: userId})
+    //         if (!projects) throw { status: 404, success: false, message: "No projects was found"}
+    //         return res.status(200).json({
+    //             status: 200, 
+    //             success: true,
+    //             projects
+    //         })
+    //     } catch (error) {
+    //         next(error)
+    //     }
+    // }
+
 }
 
 module.exports = {
