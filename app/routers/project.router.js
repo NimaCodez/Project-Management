@@ -8,12 +8,12 @@ const projectRouter = require("express").Router();
 
 projectRouter.get("/myprojects", checkLogin, ProjectController.GetAllProjects)
 
-projectRouter.get("/:id", checkLogin, mongoIdValidator(), ProjectController.GetProjectsById)
+projectRouter.get("/myprojects/:id", checkLogin, mongoIdValidator(), validationErrorMapper, ProjectController.GetProjectsById)
 
 projectRouter.post("/new", checkLogin, createProjectValodator(), validationErrorMapper, ProjectController.CreateProject)
 
-projectRouter.delete("/remove/:id", checkLogin, mongoIdValidator(), ProjectController.RemoveProject)
+projectRouter.delete("/remove/:id", checkLogin, mongoIdValidator(), validationErrorMapper, ProjectController.RemoveProject)
 
-projectRouter.patch("/upload/profile/:id", checkLogin, mongoIdValidator(), projectFileUploader.single("project_profile"), ProjectController.UpdateProject)
+projectRouter.patch("/upload/profile/:id", checkLogin, mongoIdValidator(), validationErrorMapper, projectFileUploader.single("project_profile"), ProjectController.UpdateProject)
 
 module.exports = projectRouter;

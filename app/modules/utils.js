@@ -24,7 +24,7 @@ const compareDataWithHash = (data, hashData) => {
 const generateJwtToken = payload => {
     const { username } = payload;
     console.log(username);
-    return jwt.sign({ username }, process.env.JWT_SECRET_KEY, { expiresIn: "5 days" })
+    return jwt.sign({ username }, process.env.JWT_SECRET_KEY, { expiresIn: "30 days" })
 };
 
 const verifyToken = token => {

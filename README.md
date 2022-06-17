@@ -27,6 +27,6 @@ then update ```.env``` file in the following way:
     token='Bearer CopiedToken'
 ```
 
-*tip*: Your token is valid for 5 days, and after that you have to login again and copy the new token and replce it in the ```.env``` file.
+*tip*: Your token is valid for 30 days, and after that you have to login again and copy the new token and replce it in the ```.env``` file.
 
 Hope you Enjoy!

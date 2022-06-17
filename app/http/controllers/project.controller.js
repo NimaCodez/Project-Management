@@ -49,7 +49,6 @@ class ProjectController {
             const projectId = req.params.id;
             const project = await this.findProject(projectId, owner)
             if (!project) throw { status: 404, success: false, message: "Project Was not found"}
-            project.image = project.image.split("/")[0].replace([], `${req.protocol}://${req.get("host")}${project.image}`)
             return res.status(200).json({
                 status: 200,
                 success: true,
