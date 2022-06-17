@@ -81,9 +81,7 @@ class ProjectController {
     async RemoveProject(req, res, next) {
         try {
             const owner = req.user._id;
-            console.log("owner: ", owner);
             const projectId = req.params.id;
-            console.log("projectid: ", projectId);
             const deleteResult = await projectModel.deleteOne({ owner, _id: projectId })
             if (!deleteResult.deletedCount == 0) throw {status: 500, success: false, message: "Project was not deleted, Try again"}
             return res.status(200).json({
