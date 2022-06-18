@@ -58,7 +58,7 @@ class ProjectController {
             next(error)
         }
     }
-    async UpdateProject(req, res, next) {
+    async UpdateProjectProfile(req, res, next) {
         try {
             const owner = req.user._id;
             const projectId = req.params.id;
@@ -77,7 +77,20 @@ class ProjectController {
             next(error)
         }
     }
-
+    async UpdateProject(req, res, next) {
+        try {
+            const owner = req.user._id;
+            const projectId = req.params.id;
+            const data = {...req.body};
+            const project = await projectModel.findOne({ owner, _id: projectId })
+            if(!project) throw {status: 400, success: false, message: "Project was not found!!"}
+            const result = await projectModel.updateOne({ owner: owner, _id: projectId }, { $set: data })
+            if (result.modifiedCount > 0) return res.status(200).json({ status: 200, success: true, message: "Profile Was Updated Successfuly"})
+            throw { status: 400, success: false, message: "Profile Was Not Updated" }
+        } catch (error) {
+            next(error)
+        }
+    }
     async RemoveProject(req, res, next) {
         try {
             const owner = req.user._id;

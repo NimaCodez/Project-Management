@@ -74,6 +74,8 @@ const projectStorage = multer.diskStorage({
         callback(null, projectFilePath);
     },
     filename: async function (req, file, callback) {
+        const type = path.extname(file.originalname)
+        if(![".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(type)) throw {status: 400, success: false, message: "File Format is Not Vlaid"}
         let imageName = `${hashImageName(file.originalname)}.jpg`;
         callback(null, imageName)
     }
