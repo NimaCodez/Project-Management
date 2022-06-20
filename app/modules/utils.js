@@ -56,17 +56,6 @@ const createProjectFilePath = async (req) => {
     return filePath;
 };
 
-// const checkFileExistance = (username, fileName) => {
-//     const year = new Date().getUTCFullYear();
-//     const month = new Date().getMonth();
-//     const day = new Date().getDate();
-//     let fpath = path.join(`${__dirname}/../../public/uploads/${year}/${month}/${day}/images/${username}/
-//     profile`);
-//     let fname = crypto.createHash("md5").update(fileName).digest("hex");
-//     const dir = fs.openSync(fpath);
-//     dir.includes(fname) ? 1 : 0;
-// };
-
 const projectStorage = multer.diskStorage({
     destination: async function (req, file, callback) {
         const projectFilePath = await createProjectFilePath(req);

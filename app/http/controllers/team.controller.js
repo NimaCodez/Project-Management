@@ -75,6 +75,52 @@ class TeamController {
             next(error);
         }
     }
+    async GetAllTeams(req, res, next) {
+        try {
+            const teams = await teamModel.find({})
+            return res.json({
+                status: 200,
+                success: true,
+                teams
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+    async GetMyTeams(req, res, next) {
+        try {
+            const userID = req.user._id;
+            const teams = await teamModel.find({
+                $or: [
+                    { owner: userID },
+                    { users: userID }
+                ]
+            })
+            if(!teams) throw { status: 400, success: false, message: `No team(s) was found for user ${req.user.username}` }
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                teams
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+    async GetTeamById(req, res, next) {
+        try {
+            const owner = req.user._id;
+            const teamId = req.params.id;
+            const team = await teamModel.findOne({ owner, _id: teamId })
+            if(!team) throw { status: 400, success: false, message: "No team Was Found 🥲" }
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                team
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     InviteUserToTeam() {
 
     }
@@ -86,7 +132,7 @@ class TeamController {
     GetProjectsById() {
 
     }
-    
+        
 }
 
 module.exports = {
