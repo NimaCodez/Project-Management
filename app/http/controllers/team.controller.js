@@ -41,9 +41,9 @@ class TeamController {
             const teamId = req.params.id;
             const owner = req.user._id;
             const team = await teamModel.findOne({owner, _id: teamId})
-            if (!team) throw { status: 400, success: false, message: `There is no team wich ${req.user.username} is the owner with id ${teamId}` }
-            const deleteRsult = await teamModel.deleteOne({ owner, _id: teamId })
-            if(deleteRsult.deletedCount == 0) throw { status: 500, success: false, message: "Team Was ot Deleted, Try again Later😬" }
+            if (!team) throw { status: 400, success: false, message: `There is no team which ${req.user.username} is the owner with id ${teamId}` }
+            const deleteResult = await teamModel.deleteOne({ owner, _id: teamId })
+            if(deleteResult.deletedCount == 0) throw { status: 500, success: false, message: "Team Was ot Deleted, Try again Later😬" }
             return res.status(200).json({
                 status: 200,
                 success: true,
@@ -69,7 +69,7 @@ class TeamController {
             { 
                 status: 200,
                 success: true,
-                message: "Profile Was Updated Successfuly"
+                message: "Profile Was Updated Successfully"
             })
         } catch (error) {
             next(error);

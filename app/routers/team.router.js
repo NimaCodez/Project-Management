@@ -12,9 +12,9 @@ teamRouter.get("/myteams", checkLogin, TeamController.GetMyTeams)
 
 teamRouter.get("/t/:id", checkLogin, TeamController.GetTeamById)
 
-teamRouter.get("/projets", checkLogin, TeamController.GetProjects)
+teamRouter.get("/projects", checkLogin, TeamController.GetProjects)
 
-teamRouter.get("/projets/:id", checkLogin, TeamController.GetProjectsById)
+teamRouter.get("/projects/:id", checkLogin, TeamController.GetProjectsById)
 
 teamRouter.post("/new", checkLogin, createTeamValidator(), validationErrorMapper, TeamController.CreateTeam)
 
