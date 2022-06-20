@@ -3,6 +3,7 @@ const { Schema, model, default: mongoose } = require("mongoose")
 const teamSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String},
+    username: { type: String, required: true },
     users: { type: [mongoose.Types.ObjectId], default: []},
     owner: { type: mongoose.Types.ObjectId, required: true }
 }, {timestamps: true})
