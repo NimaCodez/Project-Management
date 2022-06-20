@@ -10,7 +10,7 @@ class TeamController {
         if(!team) throw {status: 404, success: false, message: "Team not found."};
         return team;
     }
-    async checkUsernameExistance(username) {
+    async checkUsernameExistence(username) {
         const findResult = await teamModel.findOne({ username: username });
         if(!findResult) return true
         throw { status: 400, success: false, message: "Username is already taken" }
@@ -19,7 +19,7 @@ class TeamController {
         try {
             const owner = req.user._id;
             const { name, description, username } = req.body;
-            await this.checkUsernameExistance(username);
+            await this.checkUsernameExistence(username);
             const createResult = await teamModel.create({
                 name,
                 description,
@@ -58,7 +58,7 @@ class TeamController {
             const owner = req.user._id;
             const teamId = req.params.id;
             const data = {...req.body};
-            await this.checkUsernameExistance(data.username)
+            await this.checkUsernameExistence(data.username)
             const team = await this.findTeam(owner, teamId);
             Object.entries(data).forEach(([key, value]) => {
                 if(!["name", "username", "description"].includes(key)) delete data[key]
