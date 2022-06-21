@@ -1,9 +1,45 @@
-### Create Project
-post http://localhost:8000/project/new
+### Create Project | Creates a new project with the given title and description (text) & tags.  
+POST http://localhost:8000/project/new
 Content-Type: application/json
 authorization: {{$dotenv token}}
 
 {
-    "title": "pedaret Mord",
-    "text": "aha belakhare pedaret mord"
+    "title": "",
+    "text": "",
+    "tags": []
+}
+
+### Get My Projects | Returns your projects created from the first day upto now.
+GET http://localhost:8000/project/myprojects
+Content-Type: application/json
+authorization: {{$dotenv token}}
+
+### Get one project | Returns the project with the given Id
+GET http://localhost:8000/project/myprojects/{a project ObjectId from mongoDB here}
+Content-Type: application/json
+authorization: {{$dotenv token}}
+
+### Delete Project || Removes Project from Database
+DELETE http://localhost:8000/remove/{a project ObjectId from mongoDB here}
+Content-Type: application/json
+authorization: {{$dotenv token}}
+
+### Uploade Project's Profile Picture.
+PATCH http://localhost:8000/project/upload/profile/{a project ObjectId from mongoDB here}
+Content-Type: application/json
+authorization: {{$dotenv token}}
+
+{
+    // You Should Send File wich is not availibe with this file. Use Postman, Insomnia, Thunder Client Extention, Or etc.
+}
+
+### Updates Project's Info => such as title, text, tags.
+PATCH http://localhost:8000/project/edit/profile/{a project ObjectId from mongoDB here}
+Content-Type: application/json
+authorization: {{$dotenv token}}
+
+{
+    "title": "",
+    "text": "",
+    "tags": []
 }

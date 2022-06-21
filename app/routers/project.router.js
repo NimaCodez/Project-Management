@@ -16,6 +16,6 @@ projectRouter.delete("/remove/:id", checkLogin, mongoIdValidator(), validationEr
 
 projectRouter.patch("/upload/profile/:id", checkLogin, mongoIdValidator(), validationErrorMapper, projectFileUploader.single("project_profile"), ProjectController.UpdateProjectProfile)
 
-projectRouter.patch("/edit/profile/:id", checkLogin, mongoIdValidator(), validationErrorMapper,ProjectController.UpdateProject)
+projectRouter.patch("/edit/profile/:id", checkLogin, mongoIdValidator(), validationErrorMapper, ProjectController.UpdateProject)
 
 module.exports = projectRouter;
