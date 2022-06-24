@@ -3,11 +3,11 @@ Post http://localhost:8000/auth/register
 Content-Type: application/json
 
 {
-    "username": "inimar",
-    "password": "inimar",
-    "password_confirm": "inimar",
-    "email": "inimar@gmail.com",
-    "mobile": "09387631240"
+    "username": "",
+    "password": "",
+    "password_confirm": "",
+    "email": "",
+    "mobile": ""
 }
 
 ### Login
@@ -15,6 +15,6 @@ Post http://localhost:8000/auth/login
 Content-Type: application/json
 
 {
-    "username": "inimar",
-    "password": "inimar"
+    "username": "",
+    "password": ""
 }
