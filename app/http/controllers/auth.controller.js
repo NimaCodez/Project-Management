@@ -46,8 +46,12 @@ class AuthController {
         }
     }
 
-    resetPassword() {
-
+    resetPassword(req, res, next) {
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
     }
 }
 

@@ -1,12 +1,13 @@
 const autoBind = require("auto-bind");
 const { teamModel } = require("../../models/team.model");
+const { UserModel } = require("../../models/user.model");
 
 class TeamController {
     constructor(){
         autoBind(this)
     }
-    async findTeam(owner, teamId) {
-        const team = await teamModel.findOne({ owner, _id: teamId });
+    async findTeam(owner, teamid) {
+        const team = await teamModel.findOne({ owner, _id: teamid });
         if(!team) throw {status: 404, success: false, message: "Team not found."};
         return team;
     }
@@ -14,6 +15,16 @@ class TeamController {
         const findResult = await teamModel.findOne({ username: username });
         if(!findResult) return true
         throw { status: 400, success: false, message: "Username is already taken" }
+    }
+    async FindUserInTeam(teamid, userID) {
+        const result = await teamModel.findOne({
+            $or: [
+                { owner: userID },
+                { users: userID }
+            ],
+            _id: teamid
+        })
+        return !!result;
     }
     async CreateTeam(req, res, next) {
         try {
@@ -38,11 +49,11 @@ class TeamController {
     }
     async RemoveTeamById(req, res, next) {
         try {
-            const teamId = req.params.id;
+            const teamid = req.params.id;
             const owner = req.user._id;
-            const team = await teamModel.findOne({owner, _id: teamId})
-            if (!team) throw { status: 400, success: false, message: `There is no team which ${req.user.username} is the owner with id ${teamId}` }
-            const deleteResult = await teamModel.deleteOne({ owner, _id: teamId })
+            const team = await teamModel.findOne({owner, _id: teamid})
+            if (!team) throw { status: 400, success: false, message: `There is no team which ${req.user.username} is the owner with id ${teamid}` }
+            const deleteResult = await teamModel.deleteOne({ owner, _id: teamid })
             if(deleteResult.deletedCount == 0) throw { status: 500, success: false, message: "Team Was ot Deleted, Try again Later😬" }
             return res.status(200).json({
                 status: 200,
@@ -56,20 +67,20 @@ class TeamController {
     async UpdateTeam(req, res, next) {
         try {
             const owner = req.user._id;
-            const teamId = req.params.id;
+            const teamid = req.params.id;
             const data = {...req.body};
             await this.checkUsernameExistence(data.username)
-            const team = await this.findTeam(owner, teamId);
+            const team = await this.findTeam(owner, teamid);
             Object.entries(data).forEach(([key, value]) => {
                 if(!["name", "username", "description"].includes(key)) delete data[key]
                 if(["", " ", "  ", ".", null, undefined, NaN, 0, -1,, /[^<>$]/gim].includes(value)) delete data[key]
             })
-            const result = await teamModel.updateOne({ owner, _id: teamId }, { $set: data})
+            const result = await teamModel.updateOne({ owner, _id: teamid }, { $set: data})
             if (result.modifiedCount > 0) return res.status(200).json(
             { 
                 status: 200,
                 success: true,
-                message: "Profile Was Updated Successfully"
+                message: "Profile Was Updated Successfully ✨🎉"
             })
         } catch (error) {
             next(error);
@@ -90,12 +101,34 @@ class TeamController {
     async GetMyTeams(req, res, next) {
         try {
             const userID = req.user._id;
-            const teams = await teamModel.find({
-                $or: [
-                    { owner: userID },
-                    { users: userID }
-                ]
-            })
+            const teams = await teamModel.aggregate([
+                {
+                    $match: {
+                        $or: [
+                            { owner: userID },
+                            { users: userID }
+                        ]
+                    },
+                },
+                {
+                    $lookup: {
+                        localField: "owner",
+                        foreignField: "_id",
+                        from: "users",
+                        as: "owner"
+                    },
+                },
+                {
+                    $project: {
+                        "owner.username": 1,
+                        "owner.mobile": 1,
+                        "owner.email": 1
+                    },
+                },
+                {
+                    $unwind: "$owner"
+                }
+            ])
             if(!teams) throw { status: 400, success: false, message: `No team(s) was found for user ${req.user.username}` }
             return res.status(200).json({
                 status: 200,
@@ -109,8 +142,8 @@ class TeamController {
     async GetTeamById(req, res, next) {
         try {
             const owner = req.user._id;
-            const teamId = req.params.id;
-            const team = await teamModel.findOne({ owner, _id: teamId })
+            const teamid = req.params.id;
+            const team = await teamModel.findOne({ owner, _id: teamid })
             if(!team) throw { status: 400, success: false, message: "No team Was Found 🥲" }
             return res.status(200).json({
                 status: 200,
@@ -121,8 +154,34 @@ class TeamController {
             next(error)
         }
     }
-    InviteUserToTeam() {
-
+    async InviteUserToTeam(req, res, next) {
+        try {
+            const userID = req.user._id;
+            const { teamid, username } = req.params;
+            const team = await this.FindUserInTeam(teamid, userID)
+            if (!team) throw { status: 400, success: false, message: "Team Not Found 🐢" }
+            const user = await UserModel.findOne({username})
+            if (!user) throw { status: 400, success: false, message: "The user you requested to invite was not found! 🗿" }
+            const userInvited = await this.FindUserInTeam(teamid, user._id);
+            if(userInvited) throw { status: 400, success: false, message: "User has been invited before !" }
+            const request = {
+                teamid,
+                caller: req.user.username,
+                requestDate: new Date,
+                status: "Pending"
+            }
+            const InviteRequestUpdateResult = await UserModel.updateOne({ username }, {
+                $push: { inviteRequests: request }
+            })
+            if (InviteRequestUpdateResult.modifiedCount == 0) throw { status: 500, success: false, message: "Invite request wasn't been sent. 🥲" }
+            return res.status(201).json({
+                status: 201,
+                success: true,
+                message: "Invite Request Was Successfully Been Sent ✨🎉"
+            })
+        } catch (error) {
+            next(error)
+        }
     }
 
     GetProjects() {

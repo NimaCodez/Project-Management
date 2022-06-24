@@ -1,5 +1,4 @@
 ### Get User Profile
-
 Get http://localhost:8000/user/profile
 authorization: {{$dotenv token}}
 
@@ -8,8 +7,19 @@ authorization: {{$dotenv token}}
     "password": ""
 }
 
-### Edit User Profile
+### Get User's Invite Requests
+Get http://localhost:8000/user/invitations
+authorization: {{$dotenv token2}}
 
+### Get User's Invite Requests
+Get http://localhost:8000/user/requests/pending
+authorization: {{$dotenv token2}}
+
+### Change User's Invite Requests Status
+Get http://localhost:8000/user/change-request-status/62b2bb16d723760c101913da/accepted
+authorization: {{$dotenv token2}}
+
+### Edit User Profile
 Post http://localhost:8000/user/profile
 authorization: {{$dotenv token}}
 Content-Type: application/json

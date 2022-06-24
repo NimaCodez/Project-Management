@@ -10,6 +10,8 @@ teamRouter.get("/", checkLogin, TeamController.GetAllTeams)
 
 teamRouter.get("/myteams", checkLogin, TeamController.GetMyTeams)
 
+teamRouter.get("/invite/:teamid/:username", checkLogin, TeamController.InviteUserToTeam)
+
 teamRouter.get("/t/:id", checkLogin, TeamController.GetTeamById)
 
 teamRouter.get("/projects", checkLogin, TeamController.GetProjects)
